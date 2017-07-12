@@ -55,7 +55,7 @@ public class BoothActivity extends AppCompatActivity {
         statusBox = new StatusBox(this, Button1);
         megBox = new MessageBox(this);
         tv1 = (EditText) findViewById(R.id.editText);
-        tv1.setText("10");
+        tv1.setText("1");
         SelectedBDAddress = "";
 
         //新页面接收数据
@@ -164,37 +164,6 @@ public class BoothActivity extends AppCompatActivity {
     }
 
     /**
-     * 循环多张打印
-     *
-     * @param BDAddress
-     */
-    private void Print1(String BDAddress, Ztwm004 ztwm004) {
-        statusBox.Show("正在打印...");
-        if (!Bluetooth.OpenPrinter(BDAddress)) {
-            showMessage(Bluetooth.ErrorMessage);
-            Bluetooth.close();
-            statusBox.Close();
-            return;
-        }
-        // create page
-        String name = tv1.getText().toString();
-        int num = Integer.parseInt(name);
-        lable_sdk.SelectPage(0);
-        lable_sdk.ClearPage();
-        lable_sdk.SelectPage(1);
-        lable_sdk.ClearPage();
-        lable_sdk.SetPageSize(83 * 8, 72 * 8);
-        lable_sdk.ErrorConfig(true);
-        for (int i = 1; i <= num; i++) {
-            DrawContent(i, ztwm004);// content
-            lable_sdk.PrintPage(0x04, 150, false);
-            lable_sdk.ClearPage();
-        }
-        Bluetooth.close();
-        statusBox.Close();
-    }// print1
-
-    /**
      * 单张打印
      *
      * @param BDAddress 蓝牙打印地址
@@ -215,7 +184,6 @@ public class BoothActivity extends AppCompatActivity {
         lable_sdk.ClearPage();
         lable_sdk.SetPageSize(83 * 8, 72 * 8);
         lable_sdk.ErrorConfig(true);
-        System.out.println("=====>" + ztwm004);
         DrawContent(1, ztwm004);// content
         lable_sdk.PrintPage(0x04, 50, false);
         lable_sdk.SelectPage(0);
@@ -264,26 +232,28 @@ public class BoothActivity extends AppCompatActivity {
      */
     private void DrawContent(int num, Ztwm004 ztwm004) {
         try {
-            lable_sdk.DrawText(7 * 8, 8 * 8, "客户:" + ztwm004.getZkurno(), 0x00, 2);
+            lable_sdk.DrawText(5 * 8, 8 * 8, "客户:" + ztwm004.getZkurno(), 0x02, 2);
             zp_realtime_status(1000);
-            lable_sdk.DrawText(7 * 8, 12 * 8, ztwm004.getEName1(),0x00, 2);
+            lable_sdk.DrawText(5 * 8, 12 * 8, ztwm004.getEName1(),0x02, 2);
             zp_realtime_status(1000);
-            lable_sdk.DrawText(7 * 8, 16 * 8, ztwm004.getEMaktx(), 0x00, 2);
+            lable_sdk.DrawText(5 * 8, 16 * 8, ztwm004.getEMaktx(), 0x02, 2);
             zp_realtime_status(1000);
-            lable_sdk.DrawText(7 * 8, 20 * 8, "入库日期:" + ztwm004.getZproddate(), 0, 0);
+            lable_sdk.DrawText(5 * 8, 20 * 8, "入库日期:" + ztwm004.getZproddate(), 0, 0);
             zp_realtime_status(1000);
             if (null != ztwm004.getZcupno()) {
-                lable_sdk.DrawText(7 * 8, 24 * 8, "批次编号:" + ztwm004.getZcupno(), 0, 0);
+                lable_sdk.DrawText(5 * 8, 24 * 8, "批次编号:" + ztwm004.getZcupno(), 0, 0);
                 zp_realtime_status(1000);
             } else {
-                lable_sdk.DrawText(7 * 8, 24 * 8, "批次编号:", 0, 0);
+                lable_sdk.DrawText(5 * 8, 24 * 8, "批次编号:", 0, 0);
                 zp_realtime_status(1000);
             }
-            lable_sdk.DrawText(7 * 8, 28 * 8, "ERP批次号:" + ztwm004.getCharg(), 0, 0);
+            lable_sdk.DrawText(5 * 8, 28 * 8, "ERP批次号:" + ztwm004.getCharg(), 0, 0);
             zp_realtime_status(1000);
-            lable_sdk.DrawText(7 * 8, 31 * 8, "数量:" + ztwm004.getMenge() + " " + ztwm004.getMeins(), 0, 0);
+            lable_sdk.DrawText(5 * 8, 32 * 8, "数量:" + ztwm004.getMenge() + " " + ztwm004.getMeins(), 0, 0);
             zp_realtime_status(1000);
-            lable_sdk.DrawCode1D(7 * 8, 35 * 8, ztwm004.getZipcode(), 0x1, 0x03, (16 * 8));
+            lable_sdk.DrawCode1D(12 * 8, 36 * 8, ztwm004.getZipcode(), 0x1, 0x03, (10 * 8));
+            zp_realtime_status(1000);
+            lable_sdk.DrawText(20 * 8, 47 * 8, ztwm004.getZipcode(), 0, 0);
             zp_realtime_status(1000);
         } catch (Exception e) {
             e.printStackTrace();

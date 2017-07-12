@@ -38,12 +38,6 @@
         </EditText>
     </LinearLayout>
 
-    <TableRow
-        android:id="@+id/tableRow2"
-        android:layout_width="fill_parent"
-        android:layout_height="10dp" >
-    </TableRow>
-
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="fill_parent"
@@ -80,5 +74,11 @@
             android:background="@color/colorAccent"
             android:text="@string/printer3" />
     </LinearLayout>
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="fill_parent"
+        android:layout_height="10dp" >
+    </TableRow>
 
 </LinearLayout>

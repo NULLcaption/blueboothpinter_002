@@ -8,9 +8,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,6 +83,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         Werks.setOnClickListener(BtnClicked);
         //客流码
         Zkurno = (EditText) findViewById(R.id.Zkurno);
+        Zkurno.setOnEditorActionListener(EnterListenter);
         //班别
         Zbc = (EditText) findViewById(R.id.Zbc);
         Zbc.setOnClickListener(BtnClicked);
@@ -91,6 +94,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         IZipcode = (TextView) findViewById(R.id.IZipcode);
         //物料编码
         Matnr = (EditText) findViewById(R.id.matnr);
+        Matnr.setOnEditorActionListener(EnterListenter1);
         //库存日期
         Zproddate = (EditText) findViewById(R.id.Zproddate);
         Zproddate.setOnClickListener(BtnClicked);
@@ -110,8 +114,6 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         findViewById(R.id.clean).setOnClickListener(BtnClicked);//清空按钮
         findViewById(R.id.printer).setOnClickListener(BtnClicked);//打印按钮
         findViewById(R.id.exit).setOnClickListener(BtnClicked);//退出按钮
-        findViewById(R.id.btnpost2).setOnClickListener(BtnClicked);//搜索客户名称
-        findViewById(R.id.btnpost1).setOnClickListener(BtnClicked);//搜索物料名称
         findViewById(R.id.btnpost).setOnClickListener(BtnClicked);//生成托盘编码
     }
 
@@ -189,6 +191,66 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * description: 客流码输入后回车键监控
+     * author: xg.chen
+     * date: 2017/7/10 16:38
+     * version: 1.0
+    */
+    private TextView.OnEditorActionListener EnterListenter = new TextView.OnEditorActionListener() {
+        /**
+         * 参数说明
+         * @param v 被监听的对象
+         * @param actionId  动作标识符,如果值等于EditorInfo.IME_NULL，则回车键被按下。
+         * @param event    如果由输入键触发，这是事件；否则，这是空的(比如非输入键触发是空的)。
+         * @return 返回你的动作
+         */
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (!"".equals(Zkurno.getText().toString().trim())) {
+                    // 正则判断下是否输入值为数字
+                    Pattern p2 = Pattern.compile("\\d");
+                    String Matnr1 = Zkurno.getText().toString().trim();
+                    Matcher matcher = p2.matcher(Matnr1);
+                    if (matcher.matches()) {
+                        Toast.makeText(getApplicationContext(), "请填写准确的客流码...", Toast.LENGTH_SHORT).show();
+                    }
+                    new getEName1Task().execute(Zkurno.getText().toString().trim());
+                } else {
+                    Toast.makeText(getApplicationContext(), "请输入客流码,然后查询即可!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            return false;
+        }
+    };
+    /**
+     * description: 物料编码输入回车监控
+     * author: xg.chen
+     * date: 2017/7/10 16:49
+     * version: 1.0
+    */
+    private TextView.OnEditorActionListener EnterListenter1 = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (!"".equals(Matnr.getText().toString().trim())) {
+                    // 正则判断下是否输入值为数字
+                    Pattern p2 = Pattern.compile("\\d");
+                    String Matnr1 = Matnr.getText().toString().trim();
+                    Matcher matcher = p2.matcher(Matnr1);
+                    if (matcher.matches()) {
+                        Toast.makeText(getApplicationContext(), "请填写准确的物料码...", Toast.LENGTH_SHORT).show();
+                    }
+                    new getEMaktxTask().execute(Matnr.getText().toString().trim());
+                } else {
+                    Toast.makeText(getApplicationContext(), "请输入物料码,然后查询即可!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            return false;
+        }
+    };
 
     /**
      * description: 按钮事件监听类
@@ -320,36 +382,6 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                 case R.id.Zproddate:
                     // 日期格式为yyyy-MM-dd
                     zproddateDatePicker.show(Zgrdate.getText().toString());
-                    break;
-                case R.id.btnpost1:
-                    if (!"".equals(Matnr.getText().toString().trim())) {
-                        // 正则判断下是否输入值为数字
-                        Pattern p2 = Pattern.compile("\\d");
-                        String Matnr1 = Matnr.getText().toString().trim();
-                        Matcher matcher = p2.matcher(Matnr1);
-                        if (matcher.matches()) {
-                            Toast.makeText(getApplicationContext(), "请填写准确的物料码...", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                        new getEMaktxTask().execute(Matnr.getText().toString().trim());
-                    } else {
-                        Toast.makeText(getApplicationContext(), "请输入物料码,然后查询即可!", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.btnpost2:
-                    if (!"".equals(Zkurno.getText().toString().trim())) {
-                        // 正则判断下是否输入值为数字
-                        Pattern p2 = Pattern.compile("\\d");
-                        String Matnr1 = Zkurno.getText().toString().trim();
-                        Matcher matcher = p2.matcher(Matnr1);
-                        if (matcher.matches()) {
-                            Toast.makeText(getApplicationContext(), "请填写准确的客流码...", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                        new getEName1Task().execute(Zkurno.getText().toString().trim());
-                    } else {
-                        Toast.makeText(getApplicationContext(), "请输入客流码,然后查询即可!", Toast.LENGTH_SHORT).show();
-                    }
                     break;
                 //生成托盘编码
                 case R.id.btnpost:
@@ -483,6 +515,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                     Menge.setText(null);
                     Meins.setText(null);
                     EMaktx.setText(null);
+                    EName1.setText(null);
                     break;
                 case R.id.printer:
                     if ("".equals(IZipcode.getText().toString().trim().toString())) {
