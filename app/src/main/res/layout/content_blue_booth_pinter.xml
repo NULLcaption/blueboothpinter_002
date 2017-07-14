@@ -367,7 +367,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/IZipcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -377,20 +377,11 @@
                         android:layout_weight="1.70"
                         android:inputType="text"
                         android:textColor="@android:color/holo_blue_dark"
-                        android:textSize="14sp">
+                        android:textSize="14sp"
+                        android:hint="生成托盘编码">
 
                         <requestFocus />
-                    </TextView>
-
-
-                    <Button
-                        android:id="@+id/btnpost"
-                        android:layout_width="33dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/seacher" />
+                    </EditText>
                 </TableRow>
 
                 <TableRow
