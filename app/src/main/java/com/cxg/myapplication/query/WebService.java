@@ -116,7 +116,7 @@ public class WebService implements IDataProvider {
             properties.setZgrdate(ztwm004.getZgrdate());
             properties.setZkurno(ztwm004.getZkurno());
             properties.setZlinecode(ztwm004.getZlinecode());
-            properties.setZproddate(ztwm004.getZproddate());
+            properties.setZproddate(ztwm004.getZgrdate());
 
             //通过webservice获取到的返回值
             List<Object> list = WebServiceUtils.callWebServiceFor002(WebServiceUtils.URL_002, WebServiceUtils.METHOD_NAME_002, properties);
@@ -124,8 +124,10 @@ public class WebService implements IDataProvider {
                 Ztwm004 ztwm004_002 = new Ztwm004();
                 //ERP编码
                 ztwm004_002.setCharg(list.get(0).toString());
+                //批次编号
+                ztwm004_002.setZcupno(list.get(2).toString());
                 //生成的托盘编码
-                ztwm004_002.setZipcode(list.get(2).toString());
+                ztwm004_002.setZipcode(list.get(3).toString());
 
                 ztwm004List.add(ztwm004_002);
             }

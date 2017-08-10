@@ -37,9 +37,9 @@ public class WebServiceUtils {
     public static String SOAP_ACTION_001 = NAMESPACE + "/" + METHOD_NAME_001;
     public static String SOAP_ACTION_002 = NAMESPACE + "/" + METHOD_NAME_002;
     //请求的webservice路径
-    public static final String URL_004 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits4/700/zwmits4/binding?sap-client=700&sap-user=rfc&sap-password=poiuyt";
-    public static final String URL_001 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwm/700/zwm/binding?sap-client=700&sap-user=rfc&sap-password=poiuyt";
-    public static final String URL_002 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits2/700/zwmits2/binding?sap-client=700&sap-user=rfc&sap-password=poiuyt";
+    public static final String URL_004 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits4/800/zwmits4/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
+    public static final String URL_001 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwm/800/zwm/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
+    public static final String URL_002 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits2/800/zwmits2/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
 
     /**
      * 请求ZwmRfcIts002接口生成托盘编码
@@ -101,12 +101,16 @@ public class WebServiceUtils {
     public static List<Object> parseSoapObject002(SoapObject result) {
         List<Object> list = new ArrayList<>();
 
-        String ECharg = result.getProperty("ECharg").toString();
-        String EType = result.getProperty("EType").toString();
-        String EZipcode = result.getProperty("EZipcode").toString();
+        String ECharg = result.getProperty("ECharg").toString();//ERP批次编号
+        //String EMessage = result.getProperty("EMessage").toString();//返回信息
+        String EType = result.getProperty("EType").toString();//状态
+        String EZcupno = result.getProperty("EZcupno").toString();//批次编号
+        String EZipcode = result.getProperty("EZipcode").toString();//托盘编码
 
         list.add(ECharg);
+        //list.add(EMessage);
         list.add(EType);
+        list.add(EZcupno);
         list.add(EZipcode);
 
         return list;

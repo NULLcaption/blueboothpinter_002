@@ -22,6 +22,8 @@ import com.cxg.myapplication.utils.MessageBox;
 import com.cxg.myapplication.utils.StatusBox;
 import com.cxg.myapplication.utils.lable_sdk;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,9 +75,7 @@ public class BoothActivity extends AppCompatActivity {
         /*循环多张打印*/
         Button1.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View arg0) {
-                //Print1(SelectedBDAddress);
-                String systemMags = "printer1 for each!";
-                showMessage(systemMags);
+                Print1(SelectedBDAddress, ztwm004);
             }
         });
 
@@ -99,7 +99,7 @@ public class BoothActivity extends AppCompatActivity {
 
                 ztwm004_001.putString("IZipcode", ztwm004.getZipcode());
                 ztwm004_001.putString("Charg", ztwm004.getCharg());
-                ztwm004_001.putString("Zproddate", ztwm004.getZproddate());
+                ztwm004_001.putString("Zgrdate", ztwm004.getZgrdate());
                 ztwm004_001.putString("Werks", ztwm004.getWerks());
                 ztwm004_001.putString("Zkurno", ztwm004.getZkurno());
                 ztwm004_001.putString("Zbc", ztwm004.getZbc());
@@ -109,6 +109,7 @@ public class BoothActivity extends AppCompatActivity {
                 ztwm004_001.putString("Meins", ztwm004.getMeins());
                 ztwm004_001.putString("EMaktx", ztwm004.getEMaktx());
                 ztwm004_001.putString("EName1", ztwm004.getEName1());
+                ztwm004_001.putString("Zcupno",ztwm004.getZcupno());
 
                 intent.putExtras(ztwm004_001);
 
@@ -144,6 +145,7 @@ public class BoothActivity extends AppCompatActivity {
         String Zgrdate = bundle.getString("Zgrdate");//入库时间
         String EMaktx = bundle.getString("EMaktx");
         String EName1 = bundle.getString("EName1");
+        String Zcupno = bundle.getString("Zcupno");
 
         ztwm004 = new Ztwm004();
         ztwm004.setZipcode(IZipcode);
@@ -159,9 +161,41 @@ public class BoothActivity extends AppCompatActivity {
         ztwm004.setZgrdate(Zgrdate);
         ztwm004.setEMaktx(EMaktx);
         ztwm004.setEName1(EName1);
+        ztwm004.setZcupno(Zcupno);
 
         return ztwm004;
     }
+
+    /**
+     * 循环多张打印
+     *
+     * @param BDAddress
+     */
+    private void Print1(String BDAddress, Ztwm004 ztwm004) {
+        statusBox.Show("正在打印...");
+        if (!Bluetooth.OpenPrinter(BDAddress)) {
+            showMessage(Bluetooth.ErrorMessage);
+            Bluetooth.close();
+            statusBox.Close();
+            return;
+        }
+        // create page
+        String name = tv1.getText().toString();
+        int num = Integer.parseInt(name);
+        lable_sdk.SelectPage(0);
+        lable_sdk.ClearPage();
+        lable_sdk.SelectPage(1);
+        lable_sdk.ClearPage();
+        lable_sdk.SetPageSize(83 * 8, 72 * 8);
+        lable_sdk.ErrorConfig(true);
+        for (int i = 0; i < num; i++) {
+            DrawContent(num,ztwm004);// content
+            lable_sdk.PrintPage(0x04, 10, false);
+            lable_sdk.ClearPage();
+        }
+        Bluetooth.close();
+        statusBox.Close();
+    }// print1
 
     /**
      * 单张打印
@@ -185,7 +219,7 @@ public class BoothActivity extends AppCompatActivity {
         lable_sdk.SetPageSize(83 * 8, 72 * 8);
         lable_sdk.ErrorConfig(true);
         DrawContent(1, ztwm004);// content
-        lable_sdk.PrintPage(0x04, 50, false);
+        lable_sdk.PrintPage(0x04, 10, false);
         lable_sdk.SelectPage(0);
         lable_sdk.ClearPage();
         lable_sdk.SelectPage(1);
@@ -234,13 +268,18 @@ public class BoothActivity extends AppCompatActivity {
         try {
             lable_sdk.DrawText(5 * 8, 8 * 8, "客户:" + ztwm004.getZkurno(), 0x02, 2);
             zp_realtime_status(1000);
-            lable_sdk.DrawText(5 * 8, 12 * 8, ztwm004.getEName1(),0x02, 2);
-            zp_realtime_status(1000);
+            if (StringUtils.isNotEmpty(ztwm004.getEName1())) {
+                lable_sdk.DrawText(5 * 8, 12 * 8, ztwm004.getEName1(), 0x02, 2);
+                zp_realtime_status(1000);
+            } else {
+                lable_sdk.DrawText(5 * 8, 12 * 8, "客户名称:", 0x02, 2);
+                zp_realtime_status(1000);
+            }
             lable_sdk.DrawText(5 * 8, 16 * 8, ztwm004.getEMaktx(), 0x02, 2);
             zp_realtime_status(1000);
-            lable_sdk.DrawText(5 * 8, 20 * 8, "入库日期:" + ztwm004.getZproddate(), 0, 0);
+            lable_sdk.DrawText(5 * 8, 20 * 8, "生产日期:" + ztwm004.getZgrdate(), 0, 0);
             zp_realtime_status(1000);
-            if (null != ztwm004.getZcupno()) {
+            if (StringUtils.isNotEmpty(ztwm004.getZcupno())) {
                 lable_sdk.DrawText(5 * 8, 24 * 8, "批次编号:" + ztwm004.getZcupno(), 0, 0);
                 zp_realtime_status(1000);
             } else {

@@ -1,11 +1,14 @@
 package com.cxg.myapplication;
 
+import com.cxg.myapplication.pojo.Ztwm004;
 import com.cxg.myapplication.utils.WebServiceUtils;
 
 import org.junit.Test;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,6 +40,37 @@ public class ExampleUnitTest {
         List<Object> list = WebServiceUtils.callWebServiceFor001(WebServiceUtils.URL_001, WebServiceUtils.METHOD_NAME_001, properties);
         if (list.size() != 0){
             System.out.println(list.get(0));
+        }
+    }
+
+    @Test
+    public void init2() {
+        Map<String, String> map = WebServiceUtils.callWebServiceFor004(WebServiceUtils.URL_004, WebServiceUtils.METHOD_NAME_004);
+        System.out.println(map);
+    }
+
+    @Test
+    public void init3() throws ParseException {
+        //请求的参数对象
+        Ztwm004 properties = new Ztwm004();
+
+        properties.setMatnr("10400001");
+        properties.setMeins("BOX");//单位
+        properties.setMenge("80.00");//数量
+        properties.setWerks("1000");
+        properties.setZbc("1");
+        properties.setZgrdate("2017-06-27");
+        properties.setZkurno("0462");
+        properties.setZlinecode("00");
+        properties.setZproddate("2017-06-27");
+
+        //通过webservice获取到的返回值
+        List<Object> list = WebServiceUtils.callWebServiceFor002(WebServiceUtils.URL_002, WebServiceUtils.METHOD_NAME_002, properties);
+
+        if (list.size()!=0){
+            for (int i =0 ;i<list.size();i++){
+                System.out.println(list.get(i));
+            }
         }
     }
 }

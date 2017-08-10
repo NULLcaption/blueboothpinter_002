@@ -18,8 +18,8 @@
         android:id="@+id/tableRow1"
         android:layout_width="fill_parent"
         android:layout_height="20dp" >
-    </TableRow>
 
+    </TableRow>
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
@@ -46,15 +46,6 @@
         android:weightSum="1">
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="102dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dip"
-            android:layout_weight="0.30"
-            android:background="@color/colorAccent"
-            android:text="@string/printer1" />
-
-        <Button
             android:id="@+id/button1"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -65,8 +56,17 @@
             android:text="@string/printer2" />
 
         <Button
+            android:id="@+id/button2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dip"
+            android:layout_weight="0.30"
+            android:background="@color/colorAccent"
+            android:text="@string/printer1" />
+
+        <Button
             android:id="@+id/button3"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="3dip"
             android:layout_marginRight="30dp"

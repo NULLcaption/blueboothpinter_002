@@ -152,8 +152,8 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="25"
-                        android:inputType="text"
                         android:imeOptions="actionSearch"
+                        android:inputType="text"
                         android:selectAllOnFocus="false"
                         android:textColor="@android:color/black"
                         android:textSize="16sp">
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="5dp"/>
+                        android:layout_marginTop="5dp" />
 
                     <TextView
                         android:id="@+id/EName1"
@@ -211,8 +211,8 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="0.1"
-                        android:inputType="text"
                         android:imeOptions="actionSearch"
+                        android:inputType="text"
                         android:textColor="@android:color/black"
                         android:textSize="16sp">
 
@@ -247,8 +247,7 @@
                 <TableRow
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone">
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -279,7 +278,8 @@
                 <TableRow
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -343,7 +343,6 @@
                         android:layout_marginLeft="21dp"
                         android:layout_marginTop="5dp"
                         android:focusable="false"
-                        android:hint="@string/Meins"
                         android:inputType="text"
                         android:textColorHint="@android:color/holo_purple"
                         android:textSize="16sp" />
@@ -367,7 +366,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/IZipcode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -375,13 +374,13 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1.70"
+                        android:hint="生成托盘编码"
                         android:inputType="text"
                         android:textColor="@android:color/holo_blue_dark"
-                        android:textSize="14sp"
-                        android:hint="生成托盘编码">
+                        android:textSize="14sp">
 
                         <requestFocus />
-                    </EditText>
+                    </TextView>
                 </TableRow>
 
                 <TableRow
@@ -392,6 +391,27 @@
 
                     <TextView
                         android:id="@+id/Charg"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1.70"
+                        android:inputType="text"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp">
+
+                        <requestFocus />
+                    </TextView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/Zcupno"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="20dp"
