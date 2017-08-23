@@ -3,6 +3,10 @@ package com.cxg.myapplication.utils;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +21,6 @@ import java.lang.reflect.Method;
 
 public class Bluetooth {
     public static String ErrorMessage = "No_Error_Message";
-    public static boolean TextPosWinStyle = false;
     private static OutputStream myOutStream = null;
     private static InputStream myInStream = null;
     private static BluetoothSocket mySocket = null;

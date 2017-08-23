@@ -50,13 +50,14 @@ import java.util.regex.Pattern;
 public class BlueBoothPinterActivity extends AppCompatActivity {
 
     private TextView IZipcode, EMaktx, Charg, EName1, Zcupno;
-    private EditText Werks, Zkurno, Zbc, Matnr, Zproddate, Menge, Meins, Zgrdate, Zlinecode;
+    private EditText Werks, Zkurno, Zbc, Matnr, Zproddate, Menge, Meins, Zgrdate, Zlinecode, ILgmng;
     private List<Ztwm004> ztwm004list;
     private Dialog waitingDialog;
     private Dialog overdialog;
     private Map<String, String> map = new HashMap<>();
     private DatePicker zproddateDatePicker;
     private DatePicker zgrdateDatePicker;
+    private List<Ztwm004> callbackList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +109,15 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         Zgrdate = (EditText) findViewById(R.id.Zgrdate);
         Zgrdate.setOnClickListener(BtnClicked);
         Zproddate = (EditText) findViewById(R.id.Zproddate);
-        //数量
+        //标准托盘数量
         Menge = (EditText) findViewById(R.id.Menge);
+        Menge.setInputType(InputType.TYPE_NULL);
         //单位
         Meins = (EditText) findViewById(R.id.Meins);
         Meins.setOnClickListener(BtnClicked);
+        //标签数量
+        ILgmng = (EditText) findViewById(R.id.ILgmng);
+        ILgmng.setInputType(InputType.TYPE_NULL);
         //物料名称
         EMaktx = (TextView) findViewById(R.id.EMaktx);
         //客户名称
@@ -146,6 +151,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
             Zproddate.setText(bundle.getString("Zproddate"));
             Menge.setText(bundle.getString("Menge"));
             Meins.setText(bundle.getString("Meins"));
+            ILgmng.setText(bundle.getString("ILgmng"));
             EMaktx.setText(bundle.getString("EMaktx"));
             EName1.setText(bundle.getString("EName1"));
             Charg.setText(bundle.getString("Charg"));
@@ -165,6 +171,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                     Zgrdate.setText(ztwm004.getZgrdate());
                     Menge.setText(ztwm004.getMenge());
                     Meins.setText(ztwm004.getMeins());
+                    ILgmng.setText(ztwm004.getILgmng());
                     EMaktx.setText(ztwm004.getEMaktx());
                     EName1.setText(ztwm004.getEName1());
                     Charg.setText(ztwm004.getCharg());
@@ -509,7 +516,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "请选择班别!", Toast.LENGTH_SHORT).show();
             }
-            //数量
+            //标准托盘数量
             if (!"".equals(Menge.getText().toString().trim())) {
                 // 正则判断下是否输入值为数字
                 Pattern p2 = Pattern.compile("([1-9]+[0-9]*|0)(\\\\.[\\\\d]+)?");
@@ -523,6 +530,19 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "请填写准确的数量...", Toast.LENGTH_SHORT).show();
                 }
                 ztwm004_1.setMenge(Menge.getText().toString().trim());
+            } else {
+                Toast.makeText(getApplicationContext(), "请填写准确的数量!", Toast.LENGTH_SHORT).show();
+            }
+            //标签数量
+            if (!"".equals(ILgmng.getText().toString().trim())) {
+                // 正则判断下是否输入值为数字
+                Pattern p2 = Pattern.compile("^\\+{0,1}[1-9]\\d*");
+                String ILgmng1 = ILgmng.getText().toString().trim();
+                Matcher matcher = p2.matcher(ILgmng1);
+                if (!matcher.matches()) {
+                    Toast.makeText(getApplicationContext(), "请填写准确的数量...", Toast.LENGTH_SHORT).show();
+                }
+                ztwm004_1.setILgmng(ILgmng.getText().toString().trim());
             } else {
                 Toast.makeText(getApplicationContext(), "请填写准确的数量!", Toast.LENGTH_SHORT).show();
             }
@@ -573,46 +593,53 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
      * date: 2017/8/3 16:37
      * version: 1.0
      */
-    public void goBlueBoothPinterDetailActivity(String IZipcode, String Charg, String Zcupno) {
+    public void goBlueBoothPinterDetailActivity(List<Ztwm004> callbackList1) {
         try {
-            if ("".equals(IZipcode)) {
+            if (callbackList1.size()==0) {
                 Toast.makeText(getApplicationContext(), "没有生成托盘编码，请重新操作后打印！", Toast.LENGTH_SHORT).show();
+            } else {
+                //新建一个显式意图，第一个参数为当前Activity类对象，第二个参数为你要打开的Activity类
+                Intent intent = new Intent(BlueBoothPinterActivity.this, BoothActivity.class);
+                //用Bundle携带数据
+                Bundle ztwm004 = new Bundle();
+                //托盘编码
+                List<String> zipcodelist = new ArrayList<>();
+                if (callbackList1.size() != 0) {
+                    for (int i = 0; i < callbackList1.size(); i++) {
+                        zipcodelist.add(callbackList1.get(i).getZipcode());
+                    }
+                }
+                ztwm004.putString("zipcodeList", String.valueOf(zipcodelist));
+                //批次编号
+                ztwm004.putString("Zcupno", callbackList1.get(0).getZcupno());
+                //ERP编号
+                ztwm004.putString("Charg", callbackList1.get(0).getCharg());
+                //生产时间
+                ztwm004.putString("Zgrdate", Zgrdate.getText().toString().trim());
+                //工厂
+                ztwm004.putString("Werks", Werks.getText().toString().trim());
+                //客流码
+                ztwm004.putString("Zkurno", Zkurno.getText().toString().trim());
+                //班别
+                ztwm004.putString("Zbc", Zbc.getText().toString().trim());
+                //线别
+                ztwm004.putString("Zlinecode", Zlinecode.getText().toString().trim());
+                //物料码
+                ztwm004.putString("Matnr", Matnr.getText().toString().trim());
+                //数量
+                ztwm004.putString("Menge", Menge.getText().toString().trim());
+                //单位转换成汉字
+                ztwm004.putString("Meins", Meins.getText().toString().trim());
+                //物料名称
+                ztwm004.putString("EMaktx", EMaktx.getText().toString().trim());
+                //客户名称
+                ztwm004.putString("EName1", EName1.getText().toString().trim());
+                intent.putExtras(ztwm004);
+                //进入到下一个Activity
+                startActivity(intent);
+                //Activity过场动画
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
-            //新建一个显式意图，第一个参数为当前Activity类对象，第二个参数为你要打开的Activity类
-            Intent intent = new Intent(BlueBoothPinterActivity.this, BoothActivity.class);
-            //用Bundle携带数据
-            Bundle ztwm004 = new Bundle();
-            //托盘编码
-            ztwm004.putString("IZipcode", IZipcode);
-            //批次编号
-            ztwm004.putString("Zcupno",Zcupno);
-            //ERP编号
-            ztwm004.putString("Charg", Charg);
-            //生产时间
-            ztwm004.putString("Zgrdate", Zgrdate.getText().toString().trim());
-            //工厂
-            ztwm004.putString("Werks", Werks.getText().toString().trim());
-            //客流码
-            ztwm004.putString("Zkurno", Zkurno.getText().toString().trim());
-            //班别
-            ztwm004.putString("Zbc", Zbc.getText().toString().trim());
-            //线别
-            ztwm004.putString("Zlinecode", Zlinecode.getText().toString().trim());
-            //物料码
-            ztwm004.putString("Matnr", Matnr.getText().toString().trim());
-            //数量
-            ztwm004.putString("Menge", Menge.getText().toString().trim());
-            //单位转换成汉字
-            ztwm004.putString("Meins", Meins.getText().toString().trim());
-            //物料名称
-            ztwm004.putString("EMaktx", EMaktx.getText().toString().trim());
-            //客户名称
-            ztwm004.putString("EName1", EName1.getText().toString().trim());
-            intent.putExtras(ztwm004);
-            //进入到下一个Activity
-            startActivity(intent);
-            //Activity过场动画
-            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -642,15 +669,20 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         protected void onPostExecute(List<Ztwm004> result) {
             dismissWaitingDialog();
             if (result.size() != 0) {
-                Charg.setText(result.get(0).getCharg());
-                Zcupno.setText(result.get(0).getZcupno());
-                IZipcode.setText(result.get(0).getZipcode());
+                System.out.println("++++1"+result.get(0).getZtwm004s());
 
-                //生成托盘后页面跳转
-                String Charg = result.get(0).getCharg();
-                String Zcupno = result.get(0).getZcupno();
-                String IZipcode = result.get(0).getZipcode();
-                goBlueBoothPinterDetailActivity(IZipcode, Charg, Zcupno);
+                callbackList = result.get(0).getZtwm004s();
+                goBlueBoothPinterDetailActivity(callbackList);
+
+                List<String> zipcodelist = new ArrayList<>();
+                if (result.size() != 0) {
+                    for (int i = 0; i < callbackList.size(); i++) {
+                        zipcodelist.add(callbackList.get(i).getZipcode());
+                    }
+                    IZipcode.setText(zipcodelist.get(0) + ",...");
+                } else {
+                    Toast.makeText(getApplicationContext(), "连接超时...退出稍后重试...", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getApplicationContext(), "连接超时...退出稍后重试...", Toast.LENGTH_SHORT).show();
             }

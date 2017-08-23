@@ -73,4 +73,27 @@ public class ExampleUnitTest {
             }
         }
     }
+
+    @Test
+    public void init4() throws ParseException {
+        Ztwm004 properties = new Ztwm004();
+        properties.setILgmng("30.56");
+        properties.setMatnr("20400001");
+        properties.setMeins("BOX");
+        properties.setMenge("2");
+        properties.setWerks("2000");
+        properties.setZbc("1");
+        properties.setZgrdate("2017-06-27");
+        properties.setZlinecode("00");
+        properties.setIZlocco("000000");
+        properties.setZproddate("2017-06-27");
+        properties.setItZipcode(null);
+        List<Object> list = WebServiceUtils.callWebServiceFor002(WebServiceUtils.URL_007, WebServiceUtils.METHOD_NAME_007, properties);
+        if (list.size() != 0) {
+            for (int i = 0; i < list.size(); i++) {
+                Ztwm004 ztwm004 = (Ztwm004)list.get(i);
+                System.out.println(ztwm004);
+            }
+        }
+    }
 }

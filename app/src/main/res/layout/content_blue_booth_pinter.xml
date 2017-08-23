@@ -352,6 +352,38 @@
                 </TableRow>
 
                 <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:digits="@+id/text"
+                        android:text="@string/ILgmng"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/ILgmng"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="2.0"
+                        android:inputType="text"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp">
+
+                        <requestFocus />
+                    </EditText>
+
+
+                </TableRow>
+
+                <TableRow
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp">

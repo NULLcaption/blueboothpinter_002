@@ -1,5 +1,10 @@
 package com.cxg.myapplication.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -9,6 +14,7 @@ public class lable_sdk {
 
     /**
      * get length
+     *
      * @param str
      * @return
      */
@@ -26,7 +32,8 @@ public class lable_sdk {
 
     /**
      * 设置打印尺寸
-     * @param width 宽
+     *
+     * @param width  宽
      * @param height 高
      */
     public static void SetPageSize(int width, int height) {
@@ -57,6 +64,7 @@ public class lable_sdk {
      * 报错后是否提示继续打印
      * true 报错后继续打印
      * false 报错后不继续打印
+     *
      * @param ContinueFlag
      */
     public static void ErrorConfig(boolean ContinueFlag) {
@@ -73,9 +81,10 @@ public class lable_sdk {
 
     /**
      * 打印页面
-     * @param mark 0:直接停止；1：Lable;2:left mark;3:right mark;4:any；
+     *
+     * @param mark        0:直接停止；1：Lable;2:left mark;3:right mark;4:any；
      * @param maxlengthmm maxlongthmm 最大走纸距离 （毫米）
-     * @param rotate 是否旋转页面90度   true 旋转90度；
+     * @param rotate      是否旋转页面90度   true 旋转90度；
      */
     public static void PrintPage(int mark, int maxlengthmm, boolean rotate) {
         byte[] CommandData = new byte[8];
@@ -95,6 +104,7 @@ public class lable_sdk {
 
     /**
      * 画线 表格
+     *
      * @param x0
      * @param y0
      * @param x1
@@ -121,10 +131,11 @@ public class lable_sdk {
 
     /**
      * 添加文字
-     * @param x 横轴
-     * @param y 数轴
-     * @param str1 文字
-     * @param font 字体
+     *
+     * @param x        横轴
+     * @param y        数轴
+     * @param str1     文字
+     * @param font     字体
      * @param fontsize 字体大小
      */
     public static void DrawText(int x, int y, String str1, int font, int fontsize) {
@@ -151,6 +162,7 @@ public class lable_sdk {
 
     /**
      * 添加文本框
+     *
      * @param x
      * @param y
      * @param width
@@ -186,6 +198,7 @@ public class lable_sdk {
 
     /**
      * 添加一维条码
+     *
      * @param x
      * @param y
      * @param str
@@ -217,6 +230,7 @@ public class lable_sdk {
 
     /**
      * 添加二维条码
+     *
      * @param x
      * @param y
      * @param str
@@ -249,6 +263,7 @@ public class lable_sdk {
 
     /**
      * 选择页面
+     *
      * @param index
      */
     public static void SelectPage(int index) {
@@ -262,6 +277,7 @@ public class lable_sdk {
 
     /**
      * 打印带增量数据
+     *
      * @param x
      * @param y
      * @param str
@@ -293,6 +309,7 @@ public class lable_sdk {
 
     /**
      * 设置增量数据
+     *
      * @param dataL
      * @param dataH
      * @param spike
@@ -313,6 +330,7 @@ public class lable_sdk {
 
     /**
      * 打印带增量页面
+     *
      * @param mark
      * @param maxlength
      * @param num
@@ -331,5 +349,6 @@ public class lable_sdk {
         CommandData[8] = (byte) (num / 256);
         Bluetooth.SPPWrite(CommandData, 9);
     }
+
 
 }
