@@ -115,9 +115,8 @@ public class WebService implements IDataProvider {
             properties.setWerks(ztwm004.getWerks());
             properties.setZbc(ztwm004.getZbc());
             properties.setZgrdate(ztwm004.getZgrdate());
-            properties.setZkurno(ztwm004.getZkurno());
             properties.setZlinecode(ztwm004.getZlinecode());
-            properties.setIZlocco(ztwm004.getZcupno());//客流码
+            properties.setIZlocco(ztwm004.getZkurno());//客流码
             properties.setZproddate(ztwm004.getZgrdate());
             properties.setItZipcode(ztwm004.getItZipcode());
 

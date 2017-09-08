@@ -58,6 +58,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
     private DatePicker zproddateDatePicker;
     private DatePicker zgrdateDatePicker;
     private List<Ztwm004> callbackList;
+    private Button pinterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +72,9 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         //数据
         initData();
         //成品打印的数量在任何单位情况下均为80且不能大于80
-        Menge.setText("80.0");
+        Menge.setText("84");
         //工厂为固定值
-        Werks.setText("湖州工厂");
+        Werks.setText("成都工厂");
         //默认单位上设置
         Meins.setText("箱");
 
@@ -92,7 +93,8 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         //客流码
         Zkurno = (EditText) findViewById(R.id.Zkurno);
         Zkurno.setInputType(InputType.TYPE_NULL);
-        Zkurno.setOnEditorActionListener(EnterListenter);
+        //Zkurno.setOnEditorActionListener(EnterListenter);
+        Zkurno.setOnFocusChangeListener(ChangeListener);
         //班别
         Zbc = (EditText) findViewById(R.id.Zbc);
         Zbc.setOnClickListener(BtnClicked);
@@ -104,7 +106,8 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         //物料编码
         Matnr = (EditText) findViewById(R.id.matnr);
         Matnr.setInputType(InputType.TYPE_NULL);
-        Matnr.setOnEditorActionListener(EnterListenter);
+        //Matnr.setOnEditorActionListener(EnterListenter);
+        Matnr.setOnFocusChangeListener(ChangeListener);
         //生产日期
         Zgrdate = (EditText) findViewById(R.id.Zgrdate);
         Zgrdate.setOnClickListener(BtnClicked);
@@ -128,8 +131,40 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         Zcupno = (TextView) findViewById(R.id.Zcupno);
 
         findViewById(R.id.clean).setOnClickListener(BtnClicked);//清空按钮
-        findViewById(R.id.printer).setOnClickListener(BtnClicked);//打印按钮
+        //findViewById(R.id.printer).setOnClickListener(BtnClicked);
         findViewById(R.id.exit).setOnClickListener(BtnClicked);//退出按钮
+
+        //打印按钮
+        pinterButton = (Button) findViewById(R.id.printer);
+        pinterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pinterButton.setFocusable(true);
+                pinterButton.requestFocusFromTouch();
+                getZipcodeTask1();
+            }
+        });
+    }
+
+    /**
+     * description: 生成托盘编码
+     * author: xg.chen
+     * date: 2017/6/23 15:47
+     * version: 1.0
+     */
+    public void getZipcodeTask1 (){
+        Ztwm004 ztwm004_2 = setZtwm004_001();
+        if (StringUtils.isEmpty(ztwm004_2.getMessage())){
+            try {
+                new getZipcodeTask().execute(ztwm004_2);
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(getApplicationContext(), "正在后台生成数据,请稍后!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), ztwm004_2.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -217,7 +252,58 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
     }
 
     /**
-     * description: 客流码输入后回车键监控
+     * description: 失去焦点后的操作
+     * author: xg.chen
+     * date: 2017/7/10 16:38
+     * version: 1.0
+     */
+    private View.OnFocusChangeListener ChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            switch (v.getId()) {
+                case R.id.Zkurno:
+                    if(!hasFocus)  {// 此处为失去焦点时的处理内容
+                        if (!"".equals(Zkurno.getText().toString().trim())) {
+                            String Zkurno2 = Zkurno.getText().toString().trim();
+                            if ("0000".equals(Zkurno2)) {
+
+                            } else {
+                                // 正则判断下是否输入值为数字
+                                Pattern p2 = Pattern.compile("\\d");
+                                String Zkurno1 = Zkurno.getText().toString().trim();
+                                Matcher matcher = p2.matcher(Zkurno1);
+                                if (matcher.matches()) {
+                                    Toast.makeText(getApplicationContext(), "请填写准确的客流码...", Toast.LENGTH_SHORT).show();
+                                }
+                                new getEName1Task().execute(Zkurno.getText().toString().trim());
+                            }
+                        }
+                    }
+                    break;
+                case R.id.matnr:
+                    if(!hasFocus) {// 此处为失去焦点时的处理内容
+                        if (!"".equals(Matnr.getText().toString().trim())) {
+                            // 正则判断下是否输入值为数字
+                            Pattern p2 = Pattern.compile("\\d");
+                            String Matnr1 = Matnr.getText().toString().trim();
+                            Matcher matcher = p2.matcher(Matnr1);
+                            if (matcher.matches()) {
+                                Toast.makeText(getApplicationContext(), "请填写准确的物料码...", Toast.LENGTH_SHORT).show();
+                            }
+                            new getEMaktxTask().execute(Matnr.getText().toString().trim());
+                        } else {
+                            Toast.makeText(getApplicationContext(), "请输入物料码,然后查询即可!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    /**
+     * description: 回车键监控
      * author: xg.chen
      * date: 2017/7/10 16:38
      * version: 1.0
@@ -236,6 +322,8 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                 case R.id.Zkurno:
                     if (actionId == EditorInfo.IME_ACTION_SEND
                             || actionId == EditorInfo.IME_ACTION_DONE
+                            || actionId == EditorInfo.IME_ACTION_GO
+                            || actionId == EditorInfo.IME_ACTION_NEXT
                             || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode()
                             && KeyEvent.ACTION_DOWN == event.getAction())) {
                         if (!"".equals(Zkurno.getText().toString().trim())) {
@@ -260,6 +348,8 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                 case R.id.matnr:
                     if (actionId == EditorInfo.IME_ACTION_SEND
                             || actionId == EditorInfo.IME_ACTION_DONE
+                            || actionId == EditorInfo.IME_ACTION_GO
+                            || actionId == EditorInfo.IME_ACTION_NEXT
                             || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode()
                             && KeyEvent.ACTION_DOWN == event.getAction())) {
                         if (!"".equals(Matnr.getText().toString().trim())) {
@@ -428,14 +518,19 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                     break;
                 case R.id.printer:
                     Ztwm004 ztwm004_2 = setZtwm004_001();
-                    try {
-                        new getZipcodeTask().execute(ztwm004_2);
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (StringUtils.isEmpty(ztwm004_2.getMessage())){
+                        try {
+                            new getZipcodeTask().execute(ztwm004_2);
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getApplicationContext(), "正在后台生成数据,请稍后!", Toast.LENGTH_SHORT).show();
+                        break;
+                    } else {
+                        Toast.makeText(getApplicationContext(), ztwm004_2.getMessage(), Toast.LENGTH_SHORT).show();
+                        break;
                     }
-                    Toast.makeText(getApplicationContext(), "正在后台生成数据,请稍后!", Toast.LENGTH_SHORT).show();
-                    break;
                 default:
                     break;
             }
@@ -463,7 +558,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                     ztwm004_1.setWerks("3000");
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "请选择工厂!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请选择工厂!");
             }
             if (!"".equals(Matnr.getText().toString().trim())) {
                 // 正则判断下是否输入值为数字
@@ -471,31 +566,31 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                 String Matnr1 = Matnr.getText().toString().trim();
                 Matcher matcher = p2.matcher(Matnr1);
                 if (matcher.matches()) {
-                    Toast.makeText(getApplicationContext(), "请填写准确的物料码...", Toast.LENGTH_SHORT).show();
+                    ztwm004_1.setMessage("请填写准确的物料码...");
                 }
                 ztwm004_1.setMatnr(Matnr.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请输入物料码!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请填写准确的物料码...");
             }
             if (!"".equals(Zgrdate.getText().toString().trim())) {
                 ztwm004_1.setZgrdate(Zgrdate.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请选择生产日期!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请选择生产日期!");
             }
             if (!"".equals(Zlinecode.getText().toString().trim())) {
                 ztwm004_1.setZlinecode(Zlinecode.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请选择线别!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请选择线别!");
             }
             if (!"".equals(EMaktx.getText().toString().trim())) {
                 ztwm004_1.setEMaktx(EMaktx.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请输入物料码查询对应的物料名称!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请输入物料码查询对应的物料名称!");
             }
             if (!"".equals(Zkurno.getText().toString().trim())) {
                 ztwm004_1.setZkurno(Zkurno.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请填写客流码!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请填写客流码!");
             }
             //客户名称可以为空
             if (!"".equals(EName1.getText().toString().trim())) {
@@ -514,24 +609,24 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                 }
 
             } else {
-                Toast.makeText(getApplicationContext(), "请选择班别!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请选择班别!");
             }
             //标准托盘数量
             if (!"".equals(Menge.getText().toString().trim())) {
                 // 正则判断下是否输入值为数字
-                Pattern p2 = Pattern.compile("([1-9]+[0-9]*|0)(\\\\.[\\\\d]+)?");
+                Pattern p2 = Pattern.compile("^\\+{0,1}[1-9]\\d*");
                 String Menge1 = Menge.getText().toString().trim();
                 Matcher matcher = p2.matcher(Menge1);
-                Double menge_001 = 80.00;
-                if (Double.parseDouble(Menge1) > menge_001) {
-                    Toast.makeText(getApplicationContext(), "成品打印的任何单位的数量不能大于80.00!", Toast.LENGTH_SHORT).show();
+                int menge_001 = 84;
+                if (Integer.parseInt(Menge1)> menge_001) {
+                    ztwm004_1.setMessage("成品打印的任何单位的数量不能大于84!");
                 }
-                if (matcher.matches()) {
-                    Toast.makeText(getApplicationContext(), "请填写准确的数量...", Toast.LENGTH_SHORT).show();
+                if (!matcher.matches()) {
+                    ztwm004_1.setMessage("请填写准确的数量!");
                 }
                 ztwm004_1.setMenge(Menge.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请填写准确的数量!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请填写准确的数量!");
             }
             //标签数量
             if (!"".equals(ILgmng.getText().toString().trim())) {
@@ -540,11 +635,11 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                 String ILgmng1 = ILgmng.getText().toString().trim();
                 Matcher matcher = p2.matcher(ILgmng1);
                 if (!matcher.matches()) {
-                    Toast.makeText(getApplicationContext(), "请填写准确的数量...", Toast.LENGTH_SHORT).show();
+                    ztwm004_1.setMessage("请填写准确的数量...");
                 }
                 ztwm004_1.setILgmng(ILgmng.getText().toString().trim());
             } else {
-                Toast.makeText(getApplicationContext(), "请填写准确的数量!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请填写准确的数量...");
             }
             //单位
             if (!"".equals(Meins.getText().toString().trim())) {
@@ -578,7 +673,7 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
                     ztwm004_1.setMeins("BOX");
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "请选择单位!", Toast.LENGTH_SHORT).show();
+                ztwm004_1.setMessage("请选择单位!");
             }
             return ztwm004_1;
         } catch (Exception e) {
@@ -669,8 +764,6 @@ public class BlueBoothPinterActivity extends AppCompatActivity {
         protected void onPostExecute(List<Ztwm004> result) {
             dismissWaitingDialog();
             if (result.size() != 0) {
-                System.out.println("++++1"+result.get(0).getZtwm004s());
-
                 callbackList = result.get(0).getZtwm004s();
                 goBlueBoothPinterDetailActivity(callbackList);
 

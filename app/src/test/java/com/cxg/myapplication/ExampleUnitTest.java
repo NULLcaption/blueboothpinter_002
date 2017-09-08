@@ -26,7 +26,7 @@ public class ExampleUnitTest {
     @Test
     public void init () {
         HashMap<String,String> properties = new HashMap<>();
-        properties.put("IZkurno","0462");
+        properties.put("IZkurno","0384");
         List<Object> list = WebServiceUtils.callWebServiceFor001(WebServiceUtils.URL_001, WebServiceUtils.METHOD_NAME_001, properties);
         if (list.size() != 0){
             System.out.println(list.get(1));
@@ -77,15 +77,15 @@ public class ExampleUnitTest {
     @Test
     public void init4() throws ParseException {
         Ztwm004 properties = new Ztwm004();
-        properties.setILgmng("30.56");
-        properties.setMatnr("20400001");
+        properties.setILgmng("30");
+        properties.setMatnr("10400001");
         properties.setMeins("BOX");
         properties.setMenge("2");
         properties.setWerks("2000");
         properties.setZbc("1");
         properties.setZgrdate("2017-06-27");
         properties.setZlinecode("00");
-        properties.setIZlocco("000000");
+        properties.setIZlocco("0462");
         properties.setZproddate("2017-06-27");
         properties.setItZipcode(null);
         List<Object> list = WebServiceUtils.callWebServiceFor002(WebServiceUtils.URL_007, WebServiceUtils.METHOD_NAME_007, properties);

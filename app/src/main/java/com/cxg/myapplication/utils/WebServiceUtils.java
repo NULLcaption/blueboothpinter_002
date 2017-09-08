@@ -40,15 +40,15 @@ public class WebServiceUtils {
     public static String SOAP_ACTION_007 = NAMESPACE + "/" + METHOD_NAME_007;
     //请求的webservice路径
     //正式机路径
-//    public static final String URL_004 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits4/800/zwmits4/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
-//    public static final String URL_001 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwm/800/zwm/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
-//    public static final String URL_002 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits2/800/zwmits2/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
-//    public static final String URL_007 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits7/800/zwmits7/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
+    public static final String URL_004 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits4/800/zwmits4/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
+    public static final String URL_001 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwm/800/zwm/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
+    public static final String URL_002 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits2/800/zwmits2/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
+    public static final String URL_007 = "http://192.168.0.12:8000/sap/bc/srt/rfc/sap/zwmits7/800/zwmits7/binding?sap-client=800&sap-user=ABAPRFC&sap-password=xpp2@12";
     //测试机路径
-    public static final String URL_004 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits4/600/zwmits4/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
-    public static final String URL_001 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwm/600/zwm/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
-    public static final String URL_002 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits2/600/zwmits2/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
-    public static final String URL_007 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits7/600/zwmits7/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
+//    public static final String URL_004 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits4/600/zwmits4/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
+//    public static final String URL_001 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwm/600/zwm/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
+//    public static final String URL_002 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits2/600/zwmits2/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
+//    public static final String URL_007 = "http://192.168.0.16:8000/sap/bc/srt/rfc/sap/zwmits7/600/zwmits7/binding?sap-client=600&sap-user=abaprfc&sap-password=xpp2@12";
 
 
     /**

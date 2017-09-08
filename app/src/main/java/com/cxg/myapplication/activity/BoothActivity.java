@@ -242,7 +242,7 @@ public class BoothActivity extends AppCompatActivity {
      */
     public void DrawContent_1(Ztwm004 ztwm004,String zipcode){
         try {
-            Bluetooth.SPPWrite(new byte[]{0x1B, 0x40}); // 打印机复位
+            Bluetooth.SPPWrite(new byte[]{0x1B, 0x040}); // 打印机复位
             zp_realtime_status(1000);
             Bluetooth.SPPWrite(new byte[]{0x1B, 0x33, 0x00}); // 设置行间距为0
             zp_realtime_status(1000);
@@ -257,9 +257,13 @@ public class BoothActivity extends AppCompatActivity {
             zp_realtime_status(1000);
             Bluetooth.SPPWrite(new byte[] { 0x1B, 0x45, 0x01 }); // 粗体
             zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+            zp_realtime_status(100);
             Bluetooth.SPPWrite(String.format("客户:" + ztwm004.getZkurno()+"\n").getBytes("GBK"));
             zp_realtime_status(1000);
             if (StringUtils.isNotEmpty(ztwm004.getEName1())) {
+                Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+                zp_realtime_status(100);
                 Bluetooth.SPPWrite(String.format(ztwm004.getEName1()+"\n").getBytes("GBK"));
                 zp_realtime_status(1000);
             } else {
@@ -270,25 +274,37 @@ public class BoothActivity extends AppCompatActivity {
             zp_realtime_status(1000);
             Bluetooth.SPPWrite(new byte[]{0x1d, 0x21, 0x11}); // 设置倍高
             zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+            zp_realtime_status(100);
             Bluetooth.SPPWrite(String.format(ztwm004.getEMaktx()+"\n").getBytes("GBK"));
+            zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[]{0x1B, 0x61, 0x00}); // 设置不居中
+            zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1D, 0x21, 0x11 }); // 3倍字体大小
+            zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+            zp_realtime_status(100);
+            Bluetooth.SPPWrite(String.format("生产日期:" + ztwm004.getZgrdate()+"\n").getBytes("GBK"));
             zp_realtime_status(1000);
             //不需要变更字符内容
             Bluetooth.SPPWrite(new byte[] { 0x1B, 0x21, 0x00 }); // 还原默认字体大小，取消下划线，取消粗体模式
             zp_realtime_status(1000);
-            Bluetooth.SPPWrite(new byte[]{0x1d, 0x21, 0x01}); // 设置倍高
+            Bluetooth.SPPWrite(new byte[]{0x1D, 0x21, 0x01}); // 设置倍高
             zp_realtime_status(1000);
-            Bluetooth.SPPWrite(String.format("生产日期:" + ztwm004.getZgrdate()+"\n").getBytes("GBK"));
-            zp_realtime_status(1000);
-            Bluetooth.SPPWrite(new byte[]{0x1d, 0x21, 0x01}); // 设置倍高
-            zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+            zp_realtime_status(100);
             Bluetooth.SPPWrite(String.format("批次编号:" + ztwm004.getZcupno()+"\n").getBytes("GBK"));
             zp_realtime_status(1000);
-            Bluetooth.SPPWrite(new byte[]{0x1d, 0x21, 0x01}); // 设置倍高
+            Bluetooth.SPPWrite(new byte[]{0x1D, 0x21, 0x01}); // 设置倍高
             zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+            zp_realtime_status(100);
             Bluetooth.SPPWrite(String.format("ERP批次号:" + ztwm004.getCharg()+"\n").getBytes("GBK"));
             zp_realtime_status(1000);
-            Bluetooth.SPPWrite(new byte[]{0x1d, 0x21, 0x01}); // 设置倍高
+            Bluetooth.SPPWrite(new byte[]{0x1D, 0x21, 0x01}); // 设置倍高
             zp_realtime_status(1000);
+            Bluetooth.SPPWrite(new byte[] { 0x1B, 0x24, 0x28, (byte) 0x80 }); // 设置绝对打印位置5mm，80表示00
+            zp_realtime_status(100);
             Bluetooth.SPPWrite(String.format("数量:" + ztwm004.getMenge() + " " + ztwm004.getMeins()+"\n").getBytes("GBK"));
             zp_realtime_status(1000);
             // 打印code128条码
